@@ -1,3 +1,4 @@
+---
 title: "2: Reproducibility and Coding Basics"
 subtitle: "Environmental Data Analytics"
 author: "John Fay and Luana Lima | Developed by Kateri Salk"
@@ -123,7 +124,11 @@ Importantly, you may never call an R object "data". This word is reserved for a 
 
 Run the first line of code below. Then, type in "long" and press `tab`. What happens?
 
-What happens if there is a typo in your code? Type the following in the R window: Long_name_for_illustration longnameforillustration
+What happens if there is a typo in your code? Type the following in the R window: 
+Long_name_for_illustration 
+longnameforillustration
+
+**Object names are case sensitive.**
 
 ```{r}
 long_name_for_illustration <- 11
@@ -133,6 +138,8 @@ long_name_for_illustration <- 11
 ### Comments
 
 Within your R code, it is often useful to include notes about your workflow. So that these aren't interpreted by the software as code, precede the notes with a `#` sign. Your editor will display this comment as a different color to indicate it will not be run in the console. Comments can be placed on their own lines or at the end of a line of code.
+
+The pound sign: inside an R code block, it produces a comment; outside an R code block, it produces a header.
 
 ```{r}
 # I am demonstrating a comment here. 
@@ -235,7 +242,7 @@ meal2 <- recipe4(2); meal2
 meal3 <- recipe5(3); meal3
 
 recipe6 <- function(x){
-  ifelse(x<3, x*2, x/2) #log_exp, if TRUE, if FALSE
+  ifelse(x<3, x*2, x/2) #log_exp, if TRUE, if FALSE | cleaner alternative to "if" and "else" statements
   
 }
 
