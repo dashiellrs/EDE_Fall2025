@@ -4,6 +4,8 @@ subtitle: "Environmental Data Analytics"
 author: "John Fay & Luana Lima"
 date: "Fall 2025"
 output: pdf_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -103,10 +105,10 @@ create_df
 Some useful functions to use with data frames.
 
 ```{r}
-ncol(df)  
+ncol(df)
 nrow(df)  
 length(df)  #same as ncol
-summary(df)
+summary(df) #summary stats
 head(df) #show the first 6 rows of df
 
 #If you know the number of the column you want you can refer to that to access column
