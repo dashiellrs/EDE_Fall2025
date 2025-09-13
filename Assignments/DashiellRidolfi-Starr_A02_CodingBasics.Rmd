@@ -32,14 +32,14 @@ This exercise accompanies the lessons/labs in Environmental Data Analytics on co
 
 ```{r basics 1}
 #1. Used seq function to create sequence from 1 to 55 by 5s and made it an object
-seq(1,55,5)
 one_to_55_by_5s <- seq(1,55,5)
+one_to_55_by_5s
 
-#2. 
+#2. Used mean and median functions to do computations on sequence
 mean(one_to_55_by_5s)
 median(one_to_55_by_5s)
 
-#3. 
+#3. Wrote a statement comparing the outputs of mean and median functions
 mean(one_to_55_by_5s)>median(one_to_55_by_5s)
 ```
 
@@ -54,13 +54,29 @@ mean(one_to_55_by_5s)>median(one_to_55_by_5s)
 8.  Label the columns of your data frame with informative titles.
 
 ```{r basics 2}
+#5. & 6.
+names_vector <- c("Dan","Stephanie","Linda","Marcus") #character vector
+names_vector 
 
+scores_vector <- c(61, 48, 55, 42) #numeric/integer vector
+scores_vector 
+
+scholarship_vector <- c(TRUE,TRUE,FALSE,FALSE) #logical vector
+scholarship_vector
+
+#7.
+student_info_df <- data.frame(names_vector,scores_vector,scholarship_vector)
+student_info_df
+
+#8.
+names(student_info_df) <- c("Student Name","Exam Score","On Scholarship?")
+student_info_df
 
 ```
 
 9.  QUESTION: How is this data frame different from a matrix?
 
-> Answer:
+> Answer: This data frame contains columns of different modes/vector types. A matrix must contain data of the same type. 
 
 10. Create a function with one input. In this function, use `if`...`else` to evaluate the value of the input: if it is greater than 50, print the word "Pass"; otherwise print the word "Fail". 
 
@@ -72,21 +88,31 @@ mean(one_to_55_by_5s)>median(one_to_55_by_5s)
 
 ```{r basics 3}
 #10. Create a function using if...else
+greater_than_50_if...else <- function(x) {
+  if(x>50) {"Pass"}
+  else {"Fail"}
+}
 
 #11. Create a function using ifelse()
+greater_than_50_ifelse <- function(x) {
+  ifelse(x>50,"Pass","Fail")
+}
 
 #12a. Run the first function with the value 52.5
+greater_than_50_if...else(52.5)
 
 #12b. Run the second function with the value 52.5
+greater_than_50_ifelse(52.5)
 
 #13a. Run the first function with the vector of test scores
+# greater_than_50_if...else(scores_vector)
 
 #13b. Run the second function with the vector of test scores
+greater_than_50_ifelse(scores_vector)
 ```
 
 14. QUESTION: Which option of `if`...`else` vs. `ifelse` worked? Why? (Hint: search the web for "R vectorization")
 
-> Answer:
-
+> Answer: The 'ifelse' version worked. This is because 'ifelse' is a vectorized function, meaning that it can operate on each element of an input vector and produce a vector output of equal length. The 'if'...'else' version failed because 'if' is not vectorized and cannot operate on an input of more than one value. 
 
 **NOTE** Before knitting, you'll need to comment out the call to the function in Q13 that does not work. (A document can't knit if the code it contains causes an error!)
