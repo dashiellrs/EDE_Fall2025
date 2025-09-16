@@ -122,7 +122,7 @@ Commons functions to import datasets and store as data frames are *read.table()*
 ```{r Importing data}
 # Absolute file path (not recommended)
 #read.csv(
-#  file="/home/guest/EDE_Fall2024/Data/Raw/USGS_Site02085000_Flow_Raw.csv",
+#  file="/home/guest/EDE_Fall2025/Data/Raw/USGS_Site02085000_Flow_Raw.csv",
 #  stringsAsFactors = TRUE)
 
 # Relative file path (friendly for users regardless of machine)
@@ -138,16 +138,25 @@ read.csv(here("./Data/Raw/USGS_Site02085000_Flow_Raw.csv"),stringsAsFactors = TR
 >Tip: Use autocomplete in the console instead of typing in the path...
 
 ### Putting it all together
-Summarizing the above, your scripts should typically begin with the following three elements: loading packages, confirming workspace locations, and importing data using relative paths. Write a code chunk below that consolidates all these into a single chunk.
+Summarizing the above, your scripts should typically begin with the following
 
 Prior to running this, reset your workspace (Session->Restart R) to ensure it runs ok as is, with no reliance on previous code run.
 
 ```{r Setup}
 # Load packages
+library(dplyr)
+library(ggplot2)
+library(here)
 
 # Confirm working directory
+getwd()
+here()
 
 # Load the USGS flow data into a data frame
+USGS.flow.data <- read.csv(
+  file = here("./Data/Raw/USGS_Site02085000_Flow_Raw.csv"),
+  stringsAsFactors = TRUE
+)
 
 ```
 
@@ -180,14 +189,15 @@ colnames(USGS.flow.data) <- c("agency_cd", "site_no", "datetime",
                               "gage.height.max", "gage.height.max.approval", 
                               "gage.height.min", "gage.height.min.approval", 
                               "gage.height.mean", "gage.height.mean.approval")
-str(USGS.flow.data)
-dim(USGS.flow.data)
+
+str(USGS.flow.data) #structure of df - use to QC data types etc.
+dim(USGS.flow.data) #dimensions of df
 length(USGS.flow.data)
 
-head(USGS.flow.data)
-head(USGS.flow.data, 10)
-tail(USGS.flow.data, 5)
-USGS.flow.data[30000:30005, c(3, 8, 14)]
+head(USGS.flow.data) #first 5 records
+head(USGS.flow.data, 10) #first 10 records
+tail(USGS.flow.data, 5) #last 5 records
+USGS.flow.data[30000:30005, c(3, 8, 14)] #specific rows & columns
 
 class(USGS.flow.data$datetime)
 class(USGS.flow.data$discharge.mean)
@@ -198,7 +208,7 @@ summary(USGS.flow.data)  #could point to column only with $
 ```
 
 What happened to blank cells in the spreadsheet when they were imported into R?
-> Answer: 
+> Answer: turned into NA
 
 ### Identify and address issues: Missing Data
 
@@ -217,9 +227,11 @@ USGS.flow.data.complete <- na.omit(USGS.flow.data)
 dim(USGS.flow.data)
 dim(USGS.flow.data.complete)
 
+mean(USGS.flow.data$discharge.mean) # if data is missing, mean won't calculate
 mean(USGS.flow.data.complete$discharge.mean)
 sd(USGS.flow.data.complete$discharge.mean)
 summary(USGS.flow.data.complete$discharge.mean)
+summary(USGS.flow.data$discharge.mean)
 
 ```
 
@@ -247,7 +259,10 @@ Alternatively, we can tell R to import it as a factor when we read the data in
 ```{r}
 USGS.flow.data2  <- read.csv(
   file = here("./Data/Raw/USGS_Site02085000_Flow_Raw.csv"),
-  stringsAsFactors = TRUE) 
+  stringsAsFactors = TRUE,
+  colClasses = c('site_no'='factor')
+)
+str(USGS.flow.data2)
 ```
 
 
@@ -276,12 +291,12 @@ help(as.Date)
 # An example is provided to get you started.
 # (code must be uncommented)
 today <- Sys.Date()
-format(today, format = "%B")
+format(today, format = "%a") 
 #format(today, format = "")
 #format(today, format = "")
 #format(today, format = "")
 
-USGS.flow.data$datetime <- as.Date(USGS.flow.data$datetime, format = "%m/%d/%y") 
+USGS.flow.data$datetime <- as.Date(USGS.flow.data$datetime, format = "%m/%d/%y") #set column type to date, telling R how to interpret format
 ```
 
 Note that for every date prior to 1969, R has assigned the date in the 2000s rather than the 1900s. This can be fixed with an `ifelse` statement inside a function. Run through the code below and write what is happening in the comment above each line.
