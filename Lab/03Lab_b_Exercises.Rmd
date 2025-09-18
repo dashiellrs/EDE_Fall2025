@@ -3,6 +3,8 @@ title: "Lab 3a - Exercises"
 author: "Environmental Data Analytics | John Fay and Luana Lima "
 date: "Fall 2025"
 output: pdf_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ## Set up the session
@@ -21,7 +23,7 @@ here()
 
 #Import data
 pm25 <- read.csv(
-  #----ENTER THE FILENAME HERE, USING THE here() PACKAGE----
+  file = here('./Data/Raw/EPAair_PM25_NC2019_raw.csv'),
   stringsAsFactors = TRUE,
   colClasses = c("Site.ID"='factor')
 )
@@ -39,16 +41,18 @@ pm25$Date <- mdy(pm25$Date)
 
 ```{r Explore the data}
 # Compute the number of different sites
-
+# 25
 
 # Compute the mean and median PM 2.5 concentration
-
+mean(pm25$Daily.Mean.PM2.5.Concentration)
+median(pm25$Daily.Mean.PM2.5.Concentration)
 
 # What are the units
-
+# ug/m3 LC
 
 # What is the date range (min and max dates)
-
+summary(pm25$Date)
+#Jan 1, 2019 - Dec 31, 2019
 ```
 
 
@@ -61,14 +65,16 @@ pm25$Date <- mdy(pm25$Date)
 
 ```{r Visualize the data}
 #Number of samples using each different source 
-
+ggplot(pm25) +
+  geom_bar(aes(x=Source))
 
 #Distribution of daily mean concentration values
-
+ggplot(pm25) +
+  geom_histogram(aes(x=Daily.Mean.PM2.5.Concentration))
 
 #Distribution of daily mean concentration, by source
-
-
+ggplot(pm25) +
+  geom_violin(aes(x=Source, y=Daily.Mean.PM2.5.Concentration))
 
 ```
 
