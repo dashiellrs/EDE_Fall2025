@@ -3,6 +3,8 @@ title: "Lab 3b - Workspaces, Dates, and Factors"
 author: "Environmental Data Analytics | John Fay and Luana Lima "
 date: "Fall 2025"
 output: pdf_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ## Objectives
@@ -79,10 +81,19 @@ print(filenames)
 ```{r here in action}
 
 # 1. Read the 'NTL-LTER_Lake_ChemistryPhysics_Raw.csv' into a dataframe
-
+NTL_LTER_chemphys_data <- read.csv(
+  file = here('Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv'),
+  stringsAsFactors = TRUE
+)
 
 # 2.
 library(tidyverse);library(here)
+
+raw_data_folder <- here("Data", "Raw")
+EPA_files <- dir(raw_data_folder, pattern = "EPAair_O3*.*", full.names = TRUE)
+EPA_data <- EPA_files %>%
+  map(read.csv) %>%
+  reduce(rbind)
 
 ```
 
@@ -133,8 +144,8 @@ date_obj_today
 
 #Ex_3 - on your own...
 str_juneteenth <- "19 June 1865"
-#date_juneteenth <- ()
-#date_juneteenth
+date_juneteenth <- dmy(str_juneteenth)
+date_juneteenth
 ```
 ### The century issue
 
@@ -168,15 +179,15 @@ fixed_date_obj_past
 
 
 ```{r centuryfix}
-#Fix for century issue
+#Fix for century issue - specific to lubridate
 str_past <- "55-feb-3"
 
 #Alternative 1
-date_obj_past <- fast_strptime(str_past,"%y-%b-%d",cutoff_2000=24L)
+date_obj_past <- fast_strptime(str_past,"%y-%b-%d",cutoff_2000=25L)
 date_obj_past
 
 #Alternative 2
-date_obj_past2 <- parse_date_time2(str_past,"ymd",cutoff_2000=24L)
+date_obj_past2 <- parse_date_time2(str_past,"ymd",cutoff_2000=25L)
 date_obj_past2
 
 #Functions ymd(), mdy(), ydm() do not take argument cutoff_2000
@@ -215,16 +226,16 @@ Note: `wday` is a `lubridate()` function...
 
 ```{r create and explore days of week column}
 
-#Compute the day of the week each sample was collected 
+#Compute the day of the week (dow) each sample was collected 
 sites$dow <- wday(sites$date)
 
-## What class is the dow column?
+## What class is the dow column? numeric ... not right
 class(sites$dow)
 
 #List the unique values in the column
 unique(sites$dow)
 
-#Summary - is it meaningful?
+#Summary - is it meaningful? no b/c numeric
 summary(sites$dow)
 
 ```
@@ -337,10 +348,15 @@ usgs_flow_data$datetime = mdy(usgs_flow_data$datetime)
 usgs_flow_data$month <- month(usgs_flow_data$datetime)
 
 #Convert to a factor, with labels and levels
-
+usgs_flow_data$month <- factor(
+  usgs_flow_data$month,
+  levels = c(1,2,3,4,5,6,7,8,9,10,11,12),
+  labels = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")
+)
 
 #Plot
-
+ggplot(usgs_flow_data,aes(x=month)) +
+  geom_bar()
 
 ```
 
