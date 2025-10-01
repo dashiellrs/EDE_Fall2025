@@ -20,7 +20,7 @@ Effective data visualization depends on purposeful choices about graph types. Th
 
 ```{r, message = FALSE, warning = FALSE}
 library(tidyverse);library(lubridate);library(here)
-library(ggridges)
+library(ggridges) # package for ridge plots
 
 here()
 
@@ -87,7 +87,8 @@ print(O3plot)
 
 # Fix this code
 O3plot2 <- ggplot(EPAair) +
-  geom_point(aes(x = Date, y = Ozone, color = "blue"))
+ # geom_point(aes(x = Date, y = Ozone, color = "blue"))
+  geom_point(aes(x = Date, y = Ozone), color = "blue") # move color out of aesthetics
 print(O3plot2)
 
 # Add additional variables
@@ -100,17 +101,17 @@ print(PMplot)
 # Separate plot with facets
 PMplot.faceted <-
   ggplot(EPAair, aes(x = Month, y = PM2.5, shape = as.factor(Year))) +
-  geom_point() +
+  geom_point() + # instead of color, use facet_wrap
   facet_wrap(vars(Site.Name), nrow = 3)
 print(PMplot.faceted)
 
 # Filter dataset within plot building and facet by multiple variables
 PMplot.faceted2 <- 
   ggplot(subset(EPAair, Site.Name == "Clemmons Middle" | Site.Name == "Leggett" |
-                  Site.Name == "Bryson City"), 
+                  Site.Name == "Bryson City"), # specify a subset
          aes(x = Month, y = PM2.5)) + 
   geom_point() +
-  facet_grid(Site.Name ~ Year) 
+  facet_grid(Site.Name ~ Year) # -> column w/ year & rows w/ sites
 print(PMplot.faceted2)
 
 # Plot true time series with geom_line
@@ -137,8 +138,8 @@ print(lightvsDO)
 lightvsDOfixed <- 
   ggplot(PeterPaul.chem.nutrients, aes(x = irradianceWater, y = dissolvedOxygen)) +
   geom_point() +
-  xlim(0, 250) +
-  ylim(0, 20)
+  xlim(0, 250) + # from 0 to 250
+  ylim(0, 20) # from 0 to 20
 print(lightvsDOfixed)
 
 # Depth in the fields of limnology and oceanography is on a reverse scale
@@ -146,14 +147,14 @@ tempvsdepth <-
   ggplot(PeterPaul.chem.nutrients, aes(x = temperature_C, y = depth)) +
   #ggplot(PeterPaul.chem.nutrients, aes(x = temperature_C, y = depth, color = daynum)) +
   geom_point() +
-  scale_y_reverse()
+  scale_y_reverse() # because we are plotting depth, which goes down
 print(tempvsdepth)
 
 NvsP <-
   ggplot(PeterPaul.chem.nutrients, aes(x = tp_ug, y = tn_ug, color = depth)) +
   geom_point() +
-  geom_smooth(method = lm) +
-  geom_abline(aes(slope = 16, intercept = 0))
+  geom_smooth(method = lm)  + # add a line to represent relationship b/w nutrients
+  geom_abline(aes(slope = 16, intercept = 0)) # define a specific line
 print(NvsP)
 
 ```
@@ -167,14 +168,17 @@ What might be more effective ways to display the information? Navigate to the bo
 # Box and whiskers plot
 Nutrientplot3 <-
   ggplot(PeterPaul.chem.nutrients.gathered, aes(x = lakename, y = concentration)) +
-  geom_boxplot(aes(color = nutrient)) # Why didn't we use "fill"?
+  geom_boxplot(aes(color = nutrient)) # Why didn't we use "fill"? Fill changes color of inside of box; color changes the outline
 print(Nutrientplot3)
 
 # Dot plot
 Nutrientplot4 <-
   ggplot(PeterPaul.chem.nutrients.gathered, aes(x = lakename, y = concentration)) +
   geom_dotplot(aes(color = nutrient, fill = nutrient), binaxis = "y", binwidth = 1, 
-               stackdir = "center", position = "dodge", dotsize = 2) #
+               stackdir = "center", position = "dodge", dotsize = 2) 
+# "y" tells binaxis which axis
+# "center" tells which way to stack the points
+# *** "dodge" tells coinciding dots to spread instead of overlay
 print(Nutrientplot4)
 
 # Violin plot
@@ -192,12 +196,12 @@ Nutrientplot6 <-
   geom_freqpoly(aes(x = nh34), color = "blue") +
   geom_freqpoly(aes(x = no23), color = "royalblue") +
   geom_freqpoly(aes(x = po4), color = "red") 
-print(Nutrientplot6)
+print(Nutrientplot6) # problems: no legend, only one variable on x-axis...
 
 # Using a gathered dataset
 Nutrientplot7 <-   
   ggplot(PeterPaul.chem.nutrients.gathered) +
-  geom_freqpoly(aes(x = concentration, color = nutrient))
+  geom_freqpoly(aes(x = concentration, color = nutrient)) # color inside aesthetics -> adds legend automatically
 print(Nutrientplot7)
 
 # Frequency polygons have the risk of becoming spaghetti plots. 

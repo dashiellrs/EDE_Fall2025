@@ -42,7 +42,7 @@ print(O3plot)
 
 O3plot1 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
-  theme_gray()
+  theme_gray() # default theme
 print(O3plot1)
 
 O3plot2 <- ggplot(EPAair) +
@@ -63,15 +63,16 @@ print(O3plot4)
 
 Notice that some aspects of your graph have not been adjusted, including: 
 
-* text size
-* axis label colors
+* text size (default is 11)
+* axis label colors (default is black)
 * legend position and justification
 
 If you would like to set a common theme across all plots in your analysis session, you may define a theme and call up that theme for each graph. This eliminates the need to add multiple lines of code in each plot. 
 
 ```{r, fig.height = 3, fig.width = 4, warning = FALSE}
-mytheme <- theme_classic(base_size = 14) +
-  theme(axis.text = element_text(color = "black"), 
+# making a theme!
+mytheme <- theme_classic(base_size = 14) + # increasing font size
+  theme(axis.text = element_text(color = "black"),
         legend.position = "top") #alternative: legend.position + legend.justification
 
 # options: call the theme in each plot or set the theme at the start. 
@@ -81,7 +82,7 @@ O3plot5 <- ggplot(EPAair) +
   mytheme
 print(O3plot5)  
 
-theme_set(mytheme)
+theme_set(mytheme) # set theme for all subsequent plots
 
 O3plot6 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone))
@@ -95,15 +96,18 @@ While the theme allows us to set multiple aspects of plots, ggplot allows us to 
 
 ```{r, fig.height = 3, fig.width = 4, warning = FALSE}
 O3plot7 <- ggplot(EPAair, aes(x = Date, y = Ozone)) +
-  geom_hline(yintercept = 50, lty = 2) +
+ # add lines & points to graph:
+   geom_hline(yintercept = 50, lty = 2) + # line type 2 -> dashed 
   geom_hline(yintercept = 100, lty = 2) +
   geom_point(alpha = 0.5, size = 1.5) +
+  # add text to graph: 
   geom_text(x = as.Date("2020-01-01"), y = 45, label = "good", hjust = 1, fontface = "bold") +   # hjust = 1 means left align
   geom_text(x = as.Date("2020-01-01"), y = 95, label = "moderate", hjust = 1, fontface = "bold") +
   geom_text(x = as.Date("2020-01-01"), y = 120, label = "unhealthy (sensitive groups)", hjust = 1, fontface = "bold") +
+  # adjust axes:
   scale_x_date(limits = as.Date(c("2018-01-01", "2019-12-31")), 
     date_breaks = "2 months", date_labels = "%b %y") +
-  ylab(expression("O"[3]* " AQI Value")) +
+  ylab(expression("O"[3]* " AQI Value")) + # change label; [3]* means subscript 
   theme(axis.text.x = element_text(angle = 45,  hjust = 1))
 print(O3plot7)  
 
@@ -174,9 +178,9 @@ print(NvsP)
 # change your legend labels
 NvsP2 <-
   ggplot(PeterPaul.chem.nutrients, aes(x = tp_ug, y = tn_ug, color = depth, shape = lakename)) +
-  geom_point(alpha = 0.7, size = 2.5) +
-  #labs() + # change your legend labels here
-  scale_shape_manual(values = c(15, 17)) +
+  geom_point(alpha = 0.7, size = 2.5) + # alpha adds transparency
+  labs(color="Depth",shape="Lake Name") + # change your legend labels here
+  scale_shape_manual(values = c(15, 17)) + #change shape
   #scale_color_distiller(palette = "Blues", direction = 1) + # use scale_color_brewer for discrete variables
   scale_color_viridis(option = "magma", direction = -1) +
   theme(legend.position = "right", 
@@ -235,8 +239,5 @@ The following graph displays the counts of specific endpoints measured in neonic
 Neonics <- read.csv("./Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv")
 ggplot(Neonics) +
   geom_bar(aes(x = Endpoint))
-
-
-
 
 ```
