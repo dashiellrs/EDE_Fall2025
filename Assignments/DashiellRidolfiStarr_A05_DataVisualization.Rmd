@@ -119,7 +119,7 @@ TP.by.month <-
   labs(
     x = element_blank(),
     y = "TP (µg)") +
-  ylim(c(0,100))
+  ylim(c(0,100)) +
   theme(legend.position = "none")
 
 TN.by.month <-
@@ -134,8 +134,8 @@ TN.by.month <-
   ylim(c(0,1250))
 
 plot_grid( # using 'null' plots with negative heights to reduce empty space
-  temp.by.month, NULL, TP.by.month, NULL, TN.by.month, 
-  nrow = 5, align = "h", rel_heights = c(1,-0.3,1.25,-0.3,1.25))
+  temp.by.month, TP.by.month, TN.by.month, 
+  nrow = 3, align = "v", rel_heights = c(1,1.25,1.25))
 ``` 
 
 Question: What do you observe about the variables of interest over seasons and between lakes?
