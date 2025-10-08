@@ -133,7 +133,7 @@ TN.by.month <-
     color = "Lake") +
   ylim(c(0,1250))
 
-plot_grid( # using 'null' plots with negative heights to reduce empty space
+plot_grid( 
   temp.by.month, TP.by.month, TN.by.month, 
   nrow = 3, align = "v", rel_heights = c(1,1.25,1.25))
 ``` 
@@ -151,26 +151,30 @@ in Peter Lake seem to climb steadily as summer progresses.
 
 7. [Niwot Ridge] Now, plot the same plot but with NLCD classes separated into three facets rather than separated by color. 
 
-```{r Plot litter}
+```{r Plot litter1}
 #6
 litter.data %>%
   filter(functionalGroup == "Needles") %>%
   ggplot() +
-  aes(x = collectDate, y = dryMass, color = nlcdClass) +
-  geom_point() +
+  aes(x = as.factor(collectDate), y = dryMass, color = nlcdClass) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 45,  hjust = 1)) +
   labs(
     title = "Dry Mass of Needle Litter by Date",
     x = "Collection Date",
-    y = "Dry Mass (g)"
+    y = "Dry Mass (g)",
+    color = "NLCD Class"
   )
-
+```
+```{r Plot litter2, fig.height=6}
 #7
 litter.data %>%
   filter(functionalGroup == "Needles") %>%
   ggplot() +
-  aes(x = collectDate, y = dryMass) +
-  geom_point() +
-  facet_wrap(vars(nlcdClass), ncol = 3) +
+  aes(x = as.factor(collectDate), y = dryMass) +
+  geom_boxplot() +
+  facet_wrap(vars(nlcdClass), nrow = 3) +
+  theme(axis.text.x = element_text(angle = 45,  hjust = 1)) +
   labs(
     title = "Dry Mass of Needle Litter by Date",
     x = "Collection Date",
@@ -180,7 +184,7 @@ litter.data %>%
 
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
-> Answer: Plot 7 is more effective. In plot 6, there are too many colors and 
-the points are crowded too densely to draw any meaningful interpretations. In
-plot 7, the eye can focus on one cluster of related data at a time for better
-understand of its distribution, then compare clusters across sub-plots.
+> Answer: Plot 7 is more effective. In plot 6, there are too many different
+boxplots with vastly different distributions sharing the same space, making
+interpretation difficult. In plot 7, the eye can focus on one set of data over
+time, then compare across functional groups.
