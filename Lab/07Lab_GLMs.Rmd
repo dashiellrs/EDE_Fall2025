@@ -127,6 +127,11 @@ step(all_variables)
 
 #Exercise 6: Run another regression using the variables selected on Exercise 6. Compare r-squared value with the one from Exercise 2. 
 
+multiple.regression <- lm(
+  data = EPAair, 
+  PM2.5 ~ mean_Lat + mean_Lng + Month + Ozone)
+summary(multiple.regression)
+
 ```
 
 
