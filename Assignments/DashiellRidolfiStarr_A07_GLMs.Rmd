@@ -52,9 +52,8 @@ Our first research question is: Does mean lake temperature recorded during July 
 
 3. State the null and alternative hypotheses for this question:
 > Answer:
-H0: The mean temperature during July in all lakes does not change with depth.
-Ha: The mean temperature during July in all lakes changes with depth. 
-
+H0: There is no relationship between mean July temperature and depth in all lakes.
+Ha: There is a relationship between mean July temperature and depth in all lakes.
 
 4.  Wrangle your NTL-LTER dataset with a pipe function so that the records meet the following criteria: 
  * Only dates in July. 
@@ -86,8 +85,7 @@ ggplot(chemphys.wrangled, aes(x = depth, y = temperature_C)) +
 
 6. Interpret the figure. What does it suggest with regards to the response of temperature to depth? Do the distribution of points suggest about anything about the linearity of this trend?
 
-> Answer: This plot suggests that overall, temperature decreases with depth. The data's distribution suggests a non-linear relationship. This is most noticeable after depths of approximately 10 m and more, where temperatures decrease at a much slower rate.
-
+> Answer: This plot suggests that overall, temperature decreases with depth. The data's distribution suggests a non-linear relationship. The rate of change in temperature values appears slow at first, then rapid between roughly 2.5-7.5 m of depth, then slow again, with very little change after approximately 10 m. Variability in temperature also appears to decrease with depth. 
 
 7. Perform a linear regression to test the relationship and display the results.
 
@@ -103,7 +101,7 @@ summary(temp.depth.regression)
 
 8. Interpret your model results in words. Include how much of the variability in temperature is explained by changes in depth, the degrees of freedom on which this finding is based, and the statistical significance of the result. Also mention how much temperature is predicted to change for every 1m change in depth. 
 
-> Answer: There is almost certainly a relationship between temperature and depth. Depth explains approximately 73.9% of the variance in temperature. This is based on 9726 degrees of freedom and has a highly statistically significant p-value of 2.2e-16. 
+> Answer: There is almost certainly a strong relationship between temperature and depth. Depth explains approximately 73.9% of the variance in temperature. This is based on 9726 degrees of freedom and has a highly statistically significant p-value of 2.2e-16. Transforming the data may result in a more linear distribution and better fit.
 
 ---
 
@@ -157,27 +155,12 @@ summary(temps.anova2)
 
 13. Is there a significant difference in mean temperature among the lakes? Report your findings. 
 
-> Answer: There is a statistically significant difference in mean temperature among the lakes, although the R-squared value is very low; the lake name explains only about 3.9% of the variance in mean temperature.
+> Answer: There is a highly statistically significant difference in mean temperature among the lakes, although the R-squared value is very low; the lake name explains only about 3.9% of the variance in mean temperature.
 
 14. Create a graph that depicts temperature by depth, with a separate color for each lake. Add a geom_smooth (method = "lm", se = FALSE) for each lake. Make your points 50 % transparent. Adjust your y axis limits to go from 0 to 35 degrees. Clean up your graph to make it pretty. 
 
-```{r scatterplot.2}
+```{r scatterplot.2a, fig.height=4}
 #14.
-ggplot(chemphys.wrangled, aes(x = depth, y = temperature_C, color = lakename)) +
-  geom_point(alpha= 0.5) +
-  geom_smooth(method = "lm", se = FALSE, color = "black") +
-  ylim(0,35) +
-  labs(
-    x = "Depth (m)",
-    y = "Temperature (°C)",
-    title = "July Lake Temperatures by Depth",
-    subtitle = "Separated by Lake") +
-  theme(plot.subtitle = element_text(hjust = 0.5),
-        legend.position = "none") +
-  facet_wrap(vars(lakename), nrow=3) 
-
-OR
-
 ggplot(chemphys.wrangled, aes(x = depth, y = temperature_C, color = lakename)) +
   geom_point(alpha= 0.5) +
   geom_smooth(method = "lm", se = FALSE) +
@@ -185,7 +168,8 @@ ggplot(chemphys.wrangled, aes(x = depth, y = temperature_C, color = lakename)) +
   labs(
     x = "Depth (m)",
     y = "Temperature (°C)",
-    title = "July Lake Temperatures by Depth and Lake Name",
+    title = "July Lake Temperatures ",
+    subtitle = "by Depth and Lake Name",
     color = "Lake Name") +
   theme(plot.subtitle = element_text(hjust = 0.5))
 ```
