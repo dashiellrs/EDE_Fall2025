@@ -193,25 +193,27 @@ Monotonic trends are a gradual shift over time that is consistent in direction. 
 
 # Exercise 11: Apply one of the trend detection test to the original data set. Remember that the data has seasonal component, which test can be applied in this case?
 
+Rainfall_SMK1 <- SeasonalMannKendall(Rainfall_ts)
+Rainfall_SMK2 <- smk.test(Rainfall_ts)
+summary(Rainfall_SMK1)
+summary(Rainfall_SMK2)
 
-
-
-
-
-
-
+Temp_SMK1 <- SeasonalMannKendall(Temp_ts)
+Temp_SMK2 <- smk.test(Temp_ts)
+summary(Temp_SMK1)
+summary(Temp_SMK2)
 
 # Exercise 12: Now remove the seasonality and apply another test. Compare the results with what you obtained on Exercise 9.
 
+Rainfall_LM <- lm(
+  data = Rainfall_components,
+  trend ~ Date)
+summary(Rainfall_LM)
 
-
-
-
-
-
-
-
-
+Temp_LM <- lm(
+  data = Temp_components,
+  trend ~ Date)
+summary(Temp_LM)
 
 ```
 
