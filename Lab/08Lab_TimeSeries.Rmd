@@ -205,15 +205,7 @@ summary(Temp_SMK2)
 
 # Exercise 12: Now remove the seasonality and apply another test. Compare the results with what you obtained on Exercise 9.
 
-Rainfall_LM <- lm(
-  data = Rainfall_components,
-  trend ~ Date)
-summary(Rainfall_LM)
 
-Temp_LM <- lm(
-  data = Temp_components,
-  trend ~ Date)
-summary(Temp_LM)
 
 ```
 
