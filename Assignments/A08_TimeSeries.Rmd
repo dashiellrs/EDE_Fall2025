@@ -133,7 +133,7 @@ ggplot(GaringerOzone,
        
 ```
 
->Answer: The plot suggests a very slight downward trend over time.
+>Answer: The plot suggests a slight downward trend over time.
 
 ## Time Series Analysis
 
@@ -204,14 +204,10 @@ plot(GaringerOzone.monthly.decomposed)
 
 ```{r}
 #12
-Ozone.Monthly.SMK <- SeasonalMannKendall(GaringerOzone.monthly.ts)
-summary(Ozone.Monthly.SMK)
-
 smk.test(GaringerOzone.monthly.ts)
-
 ```
 
-> Answer: The decomposed time series plots indicate a strong seasonal component in these data. Only the seasonal Mann-Kendall analysis can be run on data with seasonality. Other methods, like linear regression, Mann-Kendall, and Spearman Rho, will not produce accurate results. 
+> Answer: The decomposed time series plots indicate a strong seasonal component in these data. Only the seasonal Mann-Kendall analysis can be run on data with seasonality. Other methods, like linear regression, Mann-Kendall, and Spearman Rho, will not produce accurate results if seasonality is not removed. 
 
 13. Create a plot depicting mean monthly ozone concentrations over time, with both a geom_point and a geom_line layer. Edit your axis labels accordingly.
 
@@ -229,7 +225,7 @@ ggplot(GaringerOzone.monthly,
 
 14. To accompany your graph, summarize your results in context of the research question. Include output from the statistical test in parentheses at the end of your sentence. Feel free to use multiple sentences in your interpretation.
 
-> Answer: The ozone concentrations from 2010 to 2020 show strong seasonality, which appears clearly in the monthly mean plot. However, analysis reveals that there is no statistically significant monotonic trend. Non-seasonal changes in mean monthly ozone concentrations over this period are due to random variability (2-sided pvalue =0.046724).
+> Answer: The ozone concentrations from 2010 to 2020 show strong seasonality, which appears clearly in the monthly mean plot as periodic fluctuations. The Seasonal Mann-Kendall test reveals a statistically significant downward monotonic trend in mean monthly ozone concentrations over this period (S<0, p-value = 0.04965). 
 
 15. Subtract the seasonal component from the `GaringerOzone.monthly.ts`. Hint: Look at how we extracted the series components for the EnoDischarge on the lesson Rmd file.
 
@@ -237,7 +233,6 @@ ggplot(GaringerOzone.monthly,
 
 ```{r}
 #15
-#I had to look up how to do this question
 Ozone.Monthly.seasonal.ts <-
   GaringerOzone.monthly.decomposed$time.series[,"seasonal"]
 
@@ -245,9 +240,10 @@ Ozone.Monthly.deseason.ts <-
   GaringerOzone.monthly.ts - Ozone.Monthly.seasonal.ts
 
 #16
-
-mk.test(Ozone.Monthly.deseason)
+mk.test(Ozone.Monthly.deseason.ts)
 
 ```
 
-> Answer: 
+> Answer: Both tests produce a p-value below 0.05, agreeing that the null hypothesis of stationarity can be rejected. In other words, the mean monthly ozone concentrations have a monotonic trend over time. The trend is downward according to the negative S values of both tests. The Seasonal Mann-Kendall test shows slight statistical significance (p-value = 0.04965), while the Mann-Kendall test on non-seasonal data shows stronger statistical significance (p-value = 0.00754).
+
+
