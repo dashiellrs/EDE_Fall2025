@@ -144,6 +144,8 @@ ggplot() +
   geom_sf(data=huc8_sf) +
   geom_sf(data=upper_neuse, fill = "yellow", color = "blue")
 
+mapview(huc8_sf, col.regions = "gray") + 
+  mapview(upper_neuse, col.regions = "yellow")
 ```
 
 ---
